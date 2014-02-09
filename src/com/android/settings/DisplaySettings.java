@@ -151,8 +151,8 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         ListPreference preference = mScreenTimeoutPreference;
         String summary;
         if (currentTimeout < 0) {
-            // Unsupported value
-            summary = "";
+	    final CharSequence[] entries = preference.getEntries( );
+            summary = entries[entries.length - 1].toString( );
         } else {
             final CharSequence[] entries = preference.getEntries();
             final CharSequence[] values = preference.getEntryValues();
@@ -162,12 +162,13 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                 int best = 0;
                 for (int i = 0; i < values.length; i++) {
                     long timeout = Long.parseLong(values[i].toString());
-                    if (currentTimeout >= timeout) {
+                    if ( timeout != -1 && currentTimeout >= timeout) {
                         best = i;
                     }
                 }
-                summary = preference.getContext().getString(R.string.screen_timeout_summary,
-                        entries[best]);
+
+		summary = preference.getContext().getString(R.string.screen_timeout_summary,
+                        	entries[best]);
             }
         }
         preference.setSummary(summary);
